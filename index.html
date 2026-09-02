@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Ameerah! ✨</title>
+  <style>
+    :root {
+      --primary: #ff4d6d;
+      --accent: #ff85a1;
+      --bg: #fff5f6;
+      --text: #2b2d42;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Background Hearts/Confetti */
+    .particle {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #ffe6e8;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Media Frame with smooth fade */
+    .media-wrapper {
+      width: 100%;
+      height: 320px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .media-wrapper img, 
+    .media-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Note Container */
+    .note-box {
+      text-align: left;
+      background: #fff0f3;
+      padding: 20px;
+      border-radius: 16px;
+      border-left: 4px solid var(--primary);
+      margin-top: 15px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .note-box p {
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    /* Controls */
+    .nav-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating Particles -->
+  <div id="particle-container"></div>
+
+  <!-- Screen 1: Welcome -->
+  <div class="container" id="screen-welcome">
+    <h1>🎂 Happy Birthday Ameerah! 💖</h1>
+    <p>A little surprise curated just for you. Tap below to step inside.</p>
+    <button class="btn" onclick="startExperience()">💌 Open Surprise</button>
+  </div>
+
+  <!-- Screen 2: Gallery Slideshow -->
+  <div class="container hidden" id="screen-gallery">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="media-wrapper" id="media-container"></div>
+    <p id="caption" style="font-weight: 500; min-height: 40px;"></p>
+    
+    <div class="nav-controls">
+      <button class="btn btn-secondary" onclick="prevSlide()">Previous</button>
+      <button class="btn" id="next-btn" onclick="nextSlide()">Next ➡️</button>
+    </div>
+  </div>
+
+  <!-- Screen 3: Final Birthday Note -->
+  <div class="container hidden" id="screen-note">
+    <h1>🎉 To Ameerah ❤️</h1>
+    <div class="note-box">
+      <p>Happy Birthday, Ameerah! 💖</p>
+      <p>Today is all about celebrating you and the amazing person you are. I hope this new year of your life brings you plenty of happiness, beautiful memories, success, and reasons to smile. 😊</p>
+      <p>May your days be filled with good moments, genuine laughter, and people who make life a little brighter. Keep being your wonderful self, and never forget how special you are.</p>
+      <p>I’m really glad I got to know you, and I hope these pictures and little memories bring a smile to your face. 🥹📸</p>
+      <p>Have an absolutely amazing birthday, Ameerah! 🎉🎂💐</p>
+      <p>Enjoy your day, you deserve it! ❤️✨</p>
+    </div>
+    <button class="btn" onclick="restart()">Replay 🔄</button>
+  </div>
+
+  <script>
+    const items = [
+      { type: 'image', src: 'photo1.jpg', text: 'Celebrating you today! 🥳 (1/12)' },
+      { type: 'video', src: 'video1.mp4', text: 'Memories in motion ✨ (2/12)' },
+      { type: 'image', src: 'photo2.jpg', text: 'Keep smiling always 😊 (3/12)' },
+      { type: 'image', src: 'photo3.jpg', text: 'Making great memories 📸 (4/12)' },
+      { type: 'video', src: 'video2.mp4', text: 'Good times 🎉 (5/12)' },
+      { type: 'image', src: 'photo4.jpg', text: 'Shining bright! ✨ (6/12)' },
+      { type: 'image', src: 'photo5.jpg', text: 'Another beautiful moment 🌷 (7/12)' },
+      { type: 'video', src: 'video3.mp4', text: 'Laughter and joy ❤️ (8/12)' },
+      { type: 'image', src: 'photo6.jpg', text: 'So proud of you! 🌟 (9/12)' },
+      { type: 'image', src: 'photo7.jpg', text: 'Unforgettable times 💐 (10/12)' },
+      { type: 'video', src: 'video4.mp4', text: 'Almost to the note... 🎁 (11/12)' },
+      { type: 'video', src: 'video5.mp4', text: 'Never forget how special you are ❤️ (12/12)' }
+    ];
+
+    let currentIndex = 0;
+
+    function createParticles() {
+      const container = document.getElementById('particle-container');
+      const symbols = ['💖', '✨', '🌸', '🎉', '🎈'];
+      for (let i = 0; i < 15; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(p);
+      }
+    }
+    createParticles();
+
+    function startExperience() {
+      const music = document.getElementById('bg-music');
+      music.play().catch(() => console.log("Audio play blocked."));
+
+      document.getElementById('screen-welcome').classList.add('hidden');
+      document.getElementById('screen-gallery').classList.remove('hidden');
+      renderMedia(currentIndex);
+    }
+
+    function renderMedia(index) {
+      const container = document.getElementById('media-container');
+      const caption = document.getElementById('caption');
+      const progressFill = document.getElementById('progress-fill');
+      const current = items[index];
+
+      caption.innerText = current.text;
+      
+      const percentage = ((index + 1) / items.length) * 100;
+      progressFill.style.width = percentage + '%';
+
+      if (current.type === 'image') {
+        container.innerHTML = `<img src="${current.src}" alt="Memory">`;
+      } else if (current.type === 'video') {
+        container.innerHTML = `<video src="${current.src}" autoplay loop muted playsinline></video>`;
+      }
+
+      const nextBtn = document.getElementById('next-btn');
+      if (index === items.length - 1) {
+        nextBtn.innerText = "Read Note 💌";
+      } else {
+        nextBtn.innerText = "Next ➡️";
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < items.length - 1) {
+        currentIndex++;
+        renderMedia(currentIndex);
+      } else {
+        showNote();
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderMedia(currentIndex);
+      }
+    }
+
+    function showNote() {
+      document.getElementById('screen-gallery').classList.add('hidden');
+      document.getElementById('screen-note').classList.remove('hidden');
+    }
+
+    function restart() {
+      currentIndex = 0;
+      document.getElementById('screen-note').classList.add('hidden');
+      document.getElementById('screen-welcome').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
